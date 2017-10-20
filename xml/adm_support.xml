@@ -339,9 +339,45 @@ Hard Disk:                /dev/sda 10 GB</screen>
     </step>
     <step>
      <para>
-      Run <command>supportconfig</command> without any options. This gathers
-      the default system information.
+      Run <command>supportconfig</command>. In most cases, it is enough to
+      run this tool without any options. Some options are very common and
+      are displayed in the following list:
      </para>
+     <variablelist>
+      <varlistentry>
+       <term><option>-E <replaceable>MAIL</replaceable></option></term>
+       <term><option>-N <replaceable>NAME</replaceable></option></term>
+       <term><option>-O <replaceable>COMPANY</replaceable></option></term>
+       <term><option>-P <replaceable>PHONE</replaceable></option></term>
+       <listitem>
+        <para>
+         Sets your contact data: email address (<option>-E</option>), company
+         name (<option>-O</option>), your name (<option>-N</option>), and
+         your phone number (<option>-P</option>).
+        </para>
+       </listitem>
+      </varlistentry>
+      <varlistentry>
+       <term><option>-i <replaceable>KEYWORDS</replaceable></option></term>
+       <term><option>-F</option></term>
+       <listitem>
+        <para>
+         Limits the features to check. The placeholder <replaceable>KEYWORDS</replaceable>
+         is a comma separated list of case-sensitive keywords. Get a list
+         of all keywords with <command>supportconfig -F</command>.
+        </para>
+       </listitem>
+      </varlistentry>
+      <varlistentry>
+       <term><option>-r <replaceable>SRNUMBER</replaceable></option></term>
+       <listitem>
+        <para>
+         Defines your service request number when uploading the generated
+         TAR archive.
+        </para>
+       </listitem>
+      </varlistentry>
+     </variablelist>
     </step>
     <step>
      <para>
