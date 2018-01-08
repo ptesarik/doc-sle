@@ -10,12 +10,13 @@
  <info>
   <abstract>
    <para>
-    Booting a Linux system involves different components and tasks. The
-    hardware itself is initialized by the BIOS or the UEFI, which starts the
-    kernel by means of a boot loader. After this point, the boot process is
-    completely controlled by the operating system and handled by &systemd;.
-    &systemd; provides a set of <quote>targets</quote> that boot setups for
-    everyday usage, maintenance or emergencies.
+    Booting a Linux system involves different components and tasks. After a
+    firmware and hardware initialization process, which depends on the machine's
+    architecture, the Kernel ist started by means of the boot loader
+    &grub;. After this point, the boot process is completely controlled by the
+    operating system and handled by &systemd;.  &systemd; provides a set of
+    <quote>targets</quote> that boot setups for everyday usage, maintenance or
+    emergencies.
    </para>
   </abstract>
   <dm:docmanager xmlns:dm="urn:x-suse:ns:docmanager">
@@ -23,85 +24,162 @@
    <dm:translation>yes</dm:translation>
   </dm:docmanager>
  </info>
+
  <sect1 xml:id="sec.boot.proc">
   <title>The Linux Boot Process</title>
 
   <para>
    The Linux boot process consists of several stages, each represented by a
-   different component. The following list briefly summarizes the boot process
-   and features all the major components involved:
+   different component:
   </para>
-
-  <orderedlist spacing="normal">
+  <orderedlist>
    <listitem>
-    <formalpara>
-     <title>BIOS/UEFI</title>
-     <para>
-      After turning on the computer, the BIOS or the UEFI initializes the
-      screen and keyboard, and tests the main memory. Up to this stage, the
-      machine does not access any mass storage media. Subsequently, the
-      information about the current date, time, and the most important
-      peripherals are loaded from the CMOS values. When the first hard disk and
-      its geometry are recognized, the system control passes from the BIOS to
-      the boot loader. If the BIOS supports network booting, it is also
-      possible to configure a boot server that provides the boot loader. On
-      &amd64;/&intel64; systems, PXE boot is needed. Other architectures
-      commonly use the BOOTP protocol to get the boot loader.
-      For more information on UEFI, refer to <xref linkend="cha.uefi"/>.
-     </para>
-    </formalpara>
-   </listitem>
-   <listitem>
-    <formalpara>
-     <title>Boot Loader</title>
-     <para>
-      The first physical 512-byte data sector of the first hard disk is loaded
-      into the main memory and the <emphasis>boot loader</emphasis> that
-      resides at the beginning of this sector takes over. The commands executed
-      by the boot loader determine the remaining part of the boot process.
-      Therefore, the first 512&nbsp;bytes on the first hard disk are called the
-      <emphasis>Master Boot Record</emphasis> (MBR). The boot loader then
-      passes control to the actual operating system, in this case, the Linux
-      kernel. More information about &grub;, the Linux boot loader, can be
-      found in <xref linkend="cha.grub2"/>. For a network boot, the BIOS acts
-      as the boot loader. It gets the boot image from the boot server and
-      starts the system. This is completely independent of local hard disks.
-     </para>
-    </formalpara>
     <para>
-     If the root file system fails to mount from within the boot environment,
-     it must be checked and repaired before the boot can continue. The file
-     system checker will be automatically started for Ext3 and Ext4 file
-     systems. The repair process is not automated for XFS and Btrfs file
-     systems, and the user is be presented with information describing the
-     options available to repair the file system. When the file system has been
-     successfully repaired, exiting the boot environment will cause the system
-     to retry mounting the root file system. If successful, the boot will
-     continue normally.
+     <xref linkend="sec.boot.proc.initialization" xrefstyle="HeadingOnPage"/>
     </para>
    </listitem>
-   <listitem>
-    <formalpara>
-     <title>Kernel and <systemitem>initramfs</systemitem></title>
-     <para>
-      To pass system control, the boot loader loads both the kernel and an
-      initial RAM-based file system (<systemitem>initramfs</systemitem>) into
-      memory. The contents of the <systemitem>initramfs</systemitem> can be
-      used by the kernel directly. <systemitem>initramfs</systemitem> contains
-      a small executable called <systemitem>init</systemitem> that handles the
-      mounting of the real root file system. If special hardware drivers are
-      needed before the mass storage can be accessed, they must be in
-      <systemitem>initramfs</systemitem>. For more information about
-      <systemitem>initramfs</systemitem>, refer to
-      <xref
-      linkend="sec.boot.initrd"/>. If the system does not have a
-      local hard disk, the <systemitem>initramfs</systemitem> must provide the
-      root file system for the kernel. This can be done using a network block
-      device like iSCSI or SAN, but it is also possible to use NFS as the root
-      device.
-     </para>
-    </formalpara>
-    <note>
+  </orderedlist>
+
+
+  <sect2 xml:id="sec.boot.proc.initialization">
+   <title>
+    The Initialization and Boot Loader Phase
+   </title>
+   <para>
+    During the initialization phase the machine's hardware is set up and the
+    devices are prepared. This process differs significantly between hardware
+    architectures.
+   </para>
+   <para>
+    &productname; uses the boot loader &grub; on all architectures. Depending
+    on the architecture and firmware, starting the &grub; boot loader can be a
+    multi-step process. The purpose of the boot loader is to load the Kernel
+    and the initial, RAM-based file system (initramfs). For more information
+    about &grub;, refer to <xref linkend="cha.grub"/>.
+   </para>
+   <sect3 xml:id="sec.boot.proc.initialization.x86_aarch" arch="x86-64;aarch64">
+    <title>
+     Initialization and Boot Loader Phase on &aarch64; and &x86-64;
+    </title>
+    <para>
+     After turning on the computer, the BIOS or the UEFI initializes the screen
+     and keyboard, and tests the main memory. Up to this stage, the machine
+     does not access any mass storage media. Subsequently, the information
+     about the current date, time, and the most important peripherals are
+     loaded from the CMOS values. When the boot media and its geometry are
+     recognized, the system control passes from the BIOS/UEFI to the boot
+     loader.
+    </para>
+    <para os="x86-64">
+     On a machine equipped with a traditional BIOS (or when using the BIOS
+     compatibility mode with UEFI), only code from the first physical 512-byte
+     data sector (the Master Boot Record, MBR) of the boot disk can be
+     loaded. Ther. It's sole purpose of the stage 1 &grub; is to load stage 1.5
+     from the space between the MBR and the first partition. &grub; stage 1.5
+     contains file system drivers and therefore is able to access
+     <filename>/boot</filename> located on the root file system. This directory
+     contains all files for &grub; stage 2, including the Kernel and the
+     initramfs image. &grub; stage 1.5 loads &grub; stage 2 into memory and
+     executes stage 2, the final stage of the boot loader. The purpose of this
+     stage is to load the Kernel and the initramfs image into memory and hand
+     control over to the Kernel.
+    </para>
+    <para>
+     On machines with UEFI the boot process the boot process is much simpler
+     than on machines with a traditional BIOS. The firmware is capable to read
+     from a FAT formatted system partition of disks with a GPT partition
+     table. This EFI system-partition (in the running system mounted as
+     <filename>/boot/efi</filename>) holds enough space to host a fully-fledged
+     &grub; which is directly loaded and executed by the firmware.
+    </para>
+    <para>
+     If the BIOS/UEFI supports network booting, it is also possible to
+     configure a boot server that provides the boot loader. The system can then
+     be booted via PXE. the BIOS/uEFI acts as the boot loader. It gets the boot
+     image from the boot server and starts the system. This is completely
+     independent of local hard disks.
+    </para>
+   </sect3>
+   <sect3 xml:id="sec.boot.proc.initialization.zsystems" arch="zseries">
+    <title>
+     Initialization and Boot Loader Phase on IBM &zseries;
+    </title>
+    <para>
+     On IBM &zseries; the boot process must be initialized by a boot loader
+     called <command>zipl</command> (z initial program load). Although
+     <command>zipl</command> supports reading from various file systems, it
+     does not suppport the &slea; default file system or booting from
+     snapshots. &productname; therefore uses a two-stage boot process that
+     ensures full Btrfs-support at boot-time:
+    </para>
+    <procedure>
+     <step>
+      <para>
+       <command>zipl</command> boots from the ext2-formatted partition
+       <filename>/boot/zipl</filename>. This partition contains a minimal
+       Kernel and an initramfs images that are loaded into memory. The
+       initramfs contains a Btrfs driver (among others) and the boot loader
+       &grub;. The Kernel is started with a parameter
+       <literal>initgrub</literal>, that tells it to start &grub;.
+      </para>
+     </step>
+     <step>
+      <para>
+       The Kernel mounts the root file system, so <filename>/boot</filename>
+       becomes accessible. Now &grub; is started from the initramfs. It reads
+       it's configuration from <filename>/boot/grub2/grub.cfg</filename> and
+       loads the final Kernel and initramfs from
+       <filename>/boot</filename>. The new Kernel now gets loaded via &kexec;.
+      </para>
+     </step>
+    </procedure>
+   </sect3>
+  </sect2>
+
+  <sect2 xml:id="sec.boot.proc.kernel">
+   <title>The Kernel init Phase</title>
+   <para>
+    Once the boot loader has passed on system control, the boot process is the
+    same on all architectures. The boot loader loads both the Kernel and an
+    initaial RAM-based file system (<systemitem>initramfs</systemitem>) into
+    memory. The contents of the <systemitem>initramfs</systemitem> can be used
+    by the Kernel directly.
+   </para>
+   <para>
+    <systemitem>initramfs</systemitem> contains a small executable called
+    &systemd;. This program performs all actions needed to mount the proper
+    root file system. It provides Kernel functionality for the needed file
+    system and device drivers for mass storage controllers with <systemitem
+    class="service">udev</systemitem>. After the root file system has been
+    found, it is checked for errors and mounted. If this is successful, the
+    <systemitem>initramfs</systemitem> is cleaned and the &systemd; daemon on
+    the root file system is executed. &systemd; now starts all other system
+    services. See <xref linkend="cha.systemd"/> for details.
+   </para>
+   <para>
+    If special hardware drivers are needed before the mass storage can be
+    accessed, they must be in <systemitem>initramfs</systemitem>. If the system
+    does not have a local hard disk, the <systemitem>initramfs</systemitem>
+    must provide the root file system for the Kernel. This can be done using a
+    network block device like iSCSI or SAN, but it is also possible to use NFS
+    as the root device.
+   </para>
+   <para>
+    If the root file system fails to mount from within the boot environment, it
+    must be checked and repaired before the boot can continue. The file system
+    checker will be automatically started for Ext3 and Ext4 file systems. The
+    repair process is not automated for XFS and Btrfs file systems, and the
+    user is be presented with information describing the options available to
+    repair the file system. When the file system has been successfully
+    repaired, exiting the boot environment will cause the system to retry
+    mounting the root file system. If successful, the boot will continue
+    normally.
+   </para>
+  </sect2>
+
+
+
+  <note>
      <title>The <systemitem>init</systemitem> Process Naming</title>
      <para>
       Two different programs are commonly named <quote>init</quote>:
@@ -132,7 +210,7 @@
      <title><systemitem>init</systemitem> on <systemitem>initramfs</systemitem></title>
      <para>
       This program performs all actions needed to mount the proper root file
-      system. It provides kernel functionality for the needed file system and
+      system. It provides Kernel functionality for the needed file system and
       device drivers for mass storage controllers with
       <systemitem class="service">udev</systemitem>. After the root file system
       has been found, it is checked for errors and mounted. If this is
@@ -146,23 +224,12 @@
      </para>
     </formalpara>
    </listitem>
-   <listitem>
-    <formalpara>
-     <title>&systemd;</title>
-     <para>
-      By starting services and mounting file systems, &systemd; handles the
-      actual booting of the system. &systemd; is described in
-      <xref linkend="cha.systemd"/>.
-     </para>
-    </formalpara>
-   </listitem>
-  </orderedlist>
- </sect1>
+
  <sect1 xml:id="sec.boot.initrd">
   <title><systemitem>initramfs</systemitem></title>
 
   <para>
-   <systemitem>initramfs</systemitem> is a small cpio archive that the kernel
+   <systemitem>initramfs</systemitem> is a small cpio archive that the Kernel
    can load into a RAM disk. It provides a minimal Linux environment that
    enables the execution of programs before the actual root file system is
    mounted. This minimal Linux environment is loaded into memory by BIOS or
@@ -175,7 +242,7 @@
 
   <para>
    Before the root file system can be mounted and the operating system can be
-   started, the kernel needs the corresponding drivers to access the device on
+   started, the Kernel needs the corresponding drivers to access the device on
    which the root file system is located. These drivers may include special
    drivers for certain kinds of hard disks or even network drivers to access a
    network file system. The needed modules for the root file system may be
@@ -185,12 +252,12 @@
    <systemitem>initramfs</systemitem> with the needed devices. Later in the
    boot process, after changing the root file system, it is necessary to
    regenerate the devices. This is done by the &systemd; unit
-   <filename>udev.service</filename> with the command
+   <filename>systemd-udev-trigger.service</filename> with the command
    <command>udevtrigger</command>.
   </para>
 
   <para>
-   If you need to change hardware (for example, hard disks), and this hardware requires different drivers to be in the kernel at
+   If you need to change hardware (for example, hard disks), and this hardware requires different drivers to be in the Kernel at
    boot time, you must update the <systemitem>initramfs</systemitem> file. This
    is done by calling <command>dracut</command> <option>-f</option> (the option
    <option>-f</option> overwrites the existing initramfs file). To add a driver
@@ -212,7 +279,7 @@
    <title>Updating <systemitem>initramfs</systemitem> or <systemitem>init</systemitem></title>
    <para>
     The boot loader loads <systemitem>initramfs</systemitem> or
-    <systemitem>init</systemitem> in the same way as the kernel. It is not
+    <systemitem>init</systemitem> in the same way as the Kernel. It is not
     necessary to re-install &grub; after updating
     <systemitem>initramfs</systemitem> or <systemitem>init</systemitem>,
     because &grub; searches the directory for the right file when booting.
@@ -222,7 +289,7 @@
   <tip>
    <title>Changing Kernel Variables</title>
    <para>
-    If you change the values of kernel variables via the
+    If you change the values of Kernel variables via the
     <command>sysctl</command> interface by editing related files
     (<filename>/etc/sysctl.conf</filename> or
     <filename>/etc/sysctl.d/*.conf</filename>), the change will be lost on the
@@ -253,7 +320,7 @@
       Depending on your hardware configuration, special drivers may be needed
       to access the hardware components of your computer (the most important
       component being your hard disk). To access the final root file system,
-      the kernel needs to load the proper file system drivers.
+      the Kernel needs to load the proper file system drivers.
      </para>
     </listitem>
    </varlistentry>
@@ -261,7 +328,7 @@
     <term>Providing Block Special Files</term>
     <listitem>
      <para>
-      For each loaded module, the kernel generates device events.
+      The Kernel generates device events depending on loaded modules.
       <systemitem class="service">udev</systemitem> handles these events and
       generates the required special block files on a RAM file system in
       <filename>/dev</filename>. Without those special files, the file system
@@ -353,7 +420,7 @@
     <listitem>
      <para>
       When starting the installation process, your machine loads an
-      installation kernel and a special <systemitem>init</systemitem>
+      installation Kernel and a special <systemitem>init</systemitem>
       containing the &yast; installer. The &yast; installer is running in a RAM
       file system and needs to have information about the location of the
       installation medium to access it for installing the operating system.
