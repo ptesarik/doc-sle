@@ -11,12 +11,12 @@
   <abstract>
    <para>
     Booting a Linux system involves different components and tasks. After a
-    firmware and hardware initialization process, which depends on the machine's
-    architecture, the Kernel is started by means of the boot loader
+    firmware and hardware initialization process, which depends on the
+    machine's architecture, the kernel is started by means of the boot loader
     &grub;. After this point, the boot process is completely controlled by the
     operating system and handled by &systemd;.  &systemd; provides a set of
-    <quote>targets</quote> that boot setups for everyday usage, maintenance or
-    emergencies.
+    <quote>targets</quote> that boot configurations for everyday usage,
+    maintenance or emergencies.
    </para>
   </abstract>
   <dm:docmanager xmlns:dm="urn:x-suse:ns:docmanager">
@@ -71,17 +71,17 @@
     <listitem>
      <para>
       An <systemitem>initrd</systemitem> (initial RAM disk) is an image file
-      containing a root file system image which is loaded by the Kernel and
+      containing a root file system image which is loaded by the kernel and
       mounted from <filename>/dev/ram</filename> as the temporary root file
       system. Mounting this file system requires a file system driver.
      </para>
      <para>
-      Beginning with Kernel 2.6.13, the initrd has been replaced by the
+      Beginning with kernel 2.6.13, the initrd has been replaced by the
       <systemitem>initramfs</systemitem> (initial RAM file system) which does
       not require a file system driver to be mounted. &productname; exclusively
       uses an <systemitem>initramfs</systemitem>. However, since the
       <systemitem>initramfs</systemitem> is stored as
-      <filename>/etc/initrd</filename>, it is often called
+      <filename>/boot/initrd</filename>, it is often called
       <quote>initrd</quote>. In this chapter we exclusively use the name
       <systemitem>initramfs</systemitem>.
      </para>
@@ -133,7 +133,7 @@
    <para>
     &productname; uses the boot loader &grub; on all architectures. Depending
     on the architecture and firmware, starting the &grub; boot loader can be a
-    multi-step process. The purpose of the boot loader is to load the Kernel
+    multi-step process. The purpose of the boot loader is to load the kernel
     and the initial, RAM-based file system (initramfs). For more information
     about &grub;, refer to <xref linkend="cha.grub2"/>.
    </para>
@@ -151,25 +151,25 @@
      loader.
     </para>
     <para arch="x86_64">
-     On a machine equipped with a traditional BIOS (or when using the BIOS
-     compatibility mode with UEFI), only code from the first physical 512-byte
-     data sector (the Master Boot Record, MBR) of the boot disk can be
-     loaded. The sole purpose of the stage 1 &grub; is to load stage 1.5 from
-     the space between the MBR and the first partition. &grub; stage 1.5
-     contains file system drivers and therefore is able to access
-     <filename>/boot</filename> located on the root file system. This directory
-     contains all files for &grub; stage 2, including the Kernel and the
-     initramfs image. &grub; stage 1.5 loads &grub; stage 2 into memory and
-     executes stage 2, the final stage of the boot loader. The purpose of this
-     stage is to load the Kernel and the initramfs image into memory and hand
-     control over to the Kernel.
+     On a machine equipped with a traditional BIOS, only code from the first
+     physical 512-byte data sector (the Master Boot Record, MBR) of the boot
+     disk can be loaded. Only a minimal &grub; fits into the MBR. Its sole
+     purpose is to load a &grub; core image containing file system drivers from
+     the gap between the MBR and the first partition (MBR partition table) or
+     from the BIOS boot partition (GPT partition table). This image contains
+     file system drivers and therefore is able to access
+     <filename>/boot</filename> located on the root file
+     system. <filename>/boot</filename> contains additional modules for &grub;
+     core as well as the kernel and the initramfs image. Once it has access to
+     this pooartition, &grub; loads the kernel and the initramfs image into
+     memory and hands control over to the kernel.
     </para>
     <para arch="x86_64">
      When booting a BIOS system from an encrypted file system that includes an
      encrypted <filename>/boot</filename> partition, you need to enter the
-     password for decryption twice. It is first needed for &grub; stage 1.5 to
-     decrypt <filename>/boot</filename> and then for &grub; stage 2 to decrypt
-     the root file system.
+     password for decryption twice. It is first needed by &grub; to decrypt
+     <filename>/boot</filename> and then for &systemd; to mount the encrypted
+     volumes.
     </para>
     <para>
      On machines with UEFI the boot process is much simpler than on machines
@@ -195,7 +195,7 @@
      On IBM &zseries; the boot process must be initialized by a boot loader
      called <command>zipl</command> (z initial program load). Although
      <command>zipl</command> supports reading from various file systems, it
-     does not support the &slea; default file system or booting from
+     does not support the &slea; default file system (Btrfs) or booting from
      snapshots. &productname; therefore uses a two-stage boot process that
      ensures full Btrfs-support at boot-time:
     </para>
@@ -204,19 +204,19 @@
       <para>
        <command>zipl</command> boots from the ext2-formatted partition
        <filename>/boot/zipl</filename>. This partition contains a minimal
-       Kernel and an initramfs that are loaded into memory. The initramfs
+       kernel and an initramfs that are loaded into memory. The initramfs
        contains a Btrfs driver (among others) and the boot loader &grub;. The
-       Kernel is started with a parameter <literal>initgrub</literal>, that
+       kernel is started with a parameter <literal>initgrub</literal>, that
        tells it to start &grub;.
       </para>
      </step>
      <step>
       <para>
-       The Kernel mounts the root file system, so <filename>/boot</filename>
+       The kernel mounts the root file system, so <filename>/boot</filename>
        becomes accessible. Now &grub; is started from the initramfs. It reads
        its configuration from <filename>/boot/grub2/grub.cfg</filename> and
-       loads the final Kernel and initramfs from
-       <filename>/boot</filename>. The new Kernel now gets loaded via &kexec;.
+       loads the final kernel and initramfs from
+       <filename>/boot</filename>. The new kernel now gets loaded via &kexec;.
       </para>
      </step>
     </procedure>
@@ -227,12 +227,12 @@
    <title>The Kernel Phase</title>
    <para>
     When the boot loader has passed on system control, the boot process is the
-    same on all architectures. The boot loader loads both the Kernel and an
+    same on all architectures. The boot loader loads both the kernel and an
     initial RAM-based file system (<systemitem>initramfs</systemitem>) into
-    memory and the Kernel takes over.
+    memory and the kernel takes over.
    </para>
    <para>
-    After the Kernel has set up memory management and has detected the CPU type
+    After the kernel has set up memory management and has detected the CPU type
     and its features, it initializes the hardware and mounts the temporary root
     file system from the memory that was loaded with the
     <systemitem>initramfs</systemitem>.
@@ -242,7 +242,7 @@
     <title>The <systemitem>initramfs</systemitem> file</title>
     <para>
      <systemitem>initramfs</systemitem> (initial RAM file system) is a small
-     cpio archive that the Kernel can load into a RAM disk. It is located at
+     cpio archive that the kernel can load into a RAM disk. It is located at
      <filename>/boot/initrd</filename>. It can be created with a tool called
      <command>dracut</command>&mdash;refer to <command>man 8 dracut</command>
      for details.
@@ -259,7 +259,7 @@
     </para>
     <para>
      Before the root file system can be mounted and the operating system can be
-     started, the Kernel needs the corresponding drivers to access the device
+     started, the kernel needs the corresponding drivers to access the device
      on which the root file system is located. These drivers may include
      special drivers for certain kinds of hard disks or even network drivers to
      access a network file system. The needed modules for the root file system
@@ -269,17 +269,21 @@
      <systemitem>initramfs</systemitem> with the needed devices. Later in the
      boot process, after changing the root file system, it is necessary to
      regenerate the devices. This is done by the &systemd; unit
-     <filename>systemd-udev-trigger.service</filename> with the command
-     <command>udevtrigger</command>.
+     <filename>systemd-udev-trigger.service</filename>.
     </para>
 
     <sect4 xml:id="sec.boot.initrd.regenerate">
      <title>Regenerating the initramfs</title>
      <para>
-      When managing the system with &yast; required updates to the
-      <systemitem>initramfs</systemitem> are always created
-      automatically. However, there are some occasions on which you need to
-      regenerate an <systemitem>initramfs</systemitem> manually:
+      Since the <systemitem>initramfs</systemitem> contains drivers, it needs
+      to be updated whenever a new version of one of its drivers is
+      available. This is done automatically when installing the package
+      containiing the driver update. &yast; or zypper will inform you about
+      this by showing the output of the command that generates the
+      <systemitem>initramfs</systemitem>. However, there are some occasions on
+      which you need to regenerate an <systemitem>initramfs</systemitem>
+      manually: when adding new drivers, when moving the root file system to a
+      RAID or LVM, or when permanently changing Kernel variables.
      </para>
      <variablelist>
       <varlistentry>
@@ -287,7 +291,7 @@
        <listitem>
         <para>
          If you need to change hardware (for example, hard disks), and this
-         hardware requires different drivers to be in the Kernel at boot time,
+         hardware requires different drivers to be in the kernel at boot time,
          you must update the <systemitem>initramfs</systemitem> file.
         </para>
         <para>
@@ -329,7 +333,7 @@
        <term>Changing Kernel Variables</term>
        <listitem>
         <para>
-         If you change the values of Kernel variables via the
+         If you change the values of kernel variables via the
          <command>sysctl</command> interface by editing related files
          (<filename>/etc/sysctl.conf</filename> or
          <filename>/etc/sysctl.d/*.conf</filename>), the change will be lost on
@@ -385,12 +389,12 @@
   <sect2 xml:id="sec.boot.initramfs">
    <title>The init on initramfs Phase</title>
    <para>
-    The temporary root file system mounted by the Kernel from the
+    The temporary root file system mounted by the kernel from the
     <systemitem>initramfs</systemitem> contains the executable &systemd; (which
     is called <systemitem>init</systemitem> on
     <systemitem>initramfs</systemitem> in the following, also see <xref
     linkend="sec.boot.terminology"/>. This program performs all actions needed
-    to mount the proper root file system. It provides Kernel functionality for
+    to mount the proper root file system. It provides kernel functionality for
     the needed file system and device drivers for mass storage controllers with
     <systemitem class="service">udev</systemitem>.
    </para>
@@ -411,7 +415,7 @@
        Depending on your hardware configuration, special drivers may be needed
        to access the hardware components of your computer (the most important
        component being your hard disk). To access the final root file system,
-       the Kernel needs to load the proper file system drivers.
+       the kernel needs to load the proper file system drivers.
       </para>
      </listitem>
     </varlistentry>
@@ -419,7 +423,7 @@
      <term>Providing Block Special Files</term>
      <listitem>
       <para>
-       The Kernel generates device events depending on loaded modules.
+       The kernel generates device events depending on loaded modules.
        <systemitem class="service">udev</systemitem> handles these events and
        generates the required special block files on a RAM file system in
        <filename>/dev</filename>. Without those special files, the file system
@@ -491,7 +495,7 @@
       <listitem>
        <para>
         When starting the installation process, your machine loads an
-        installation Kernel and a special <systemitem>init</systemitem>
+        installation kernel and a special <systemitem>init</systemitem>
         containing the &yast; installer. The &yast; installer is running in a
         RAM file system and needs to have information about the location of the
         installation medium to access it for installing the operating system.
