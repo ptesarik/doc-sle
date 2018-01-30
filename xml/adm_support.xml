@@ -624,9 +624,9 @@ Hard Disk:                /dev/sda 10 GB</screen>
    generated on a &sle; 11 machine, you need to install the package
    <systemitem class="resource">sca-patterns-sle11</systemitem> together with
    the SCA tool (or on the machine that you want to use as the SCA appliance
-   server). To analyze supportconfig archives generated on a &sle; 10 machine,
+   server). To analyze supportconfig archives generated on a &sle; 15 machine,
    you need the package
-   <systemitem class="resource">sca-patterns-sle10</systemitem>.
+   <systemitem class="resource">sca-patterns-sle15</systemitem>.
   </para>
 
   <para>
