@@ -394,6 +394,86 @@ Hard Disk:                /dev/sda 10 GB</screen>
    </procedure>
   </sect2>
 
+  <sect2 xml:id="sec.admsupport.supportconfig.log">
+   <title>Understanding the Output of <command>supportconfig</command></title>
+   <para>
+    Wheather you run <command>supportconfig</command> through &yast; or directly,
+    the script gives you a summary of what it did.
+   </para>
+   <screen>                     Support Utilities - Supportconfig
+                          Script Version: 3.0-98 <!--<co xml:id="co.admsupport.script.version"/>-->
+                          Script Date: 2017 06 01<!-- <xref linkend="co.admsupport.script.version"/>-->
+[...]
+Gathering system information
+  Data Directory:    /var/log/nts_d251_180201_1525 <co xml:id="co.admsupport.script.datadir"/>
+
+  Basic Server Health Check...                 Done <co xml:id="co.admsupport.script.done"/>
+  RPM Database...                              Done <xref linkend="co.admsupport.script.done"/>
+  Basic Environment...                         Done <xref linkend="co.admsupport.script.done"/>
+  System Modules...                            Done <xref linkend="co.admsupport.script.done"/>
+[...]
+  File System List...                          Skipped <co xml:id="co.admsupport.script.skipped"/>
+[...]
+  Command History...                           Excluded <co xml:id="co.admsupport.script.excluded"/>
+[...]
+  Supportconfig Plugins:                       1 <co xml:id="co.admsupport.script.plugin"/>
+    Plugin: pstree...                          Done
+[...]
+Creating Tar Ball
+
+==[ DONE ]===================================================================
+  Log file tar ball: /var/log/nts_d251_180201_1525.tbz <co xml:id="co.admsupport.script.archive"/>
+  Log file size:     732K
+  Log file md5sum:   bf23e0e15e9382c49f92cbce46000d8b
+=============================================================================</screen>
+   <calloutlist>
+    <!--<callout arearefs="co.admsupport.script.version">
+     <para>
+      The version and the date of the <command>supportconfig</command> command.
+      Higher versions can support more features.
+     </para>
+    </callout>-->
+    <callout arearefs="co.admsupport.script.datadir">
+     <para>
+      The temporary data directory to store the results. This directory is
+      archived as tar file, see <xref linkend="co.admsupport.script.archive"/>.
+     </para>
+    </callout>
+    <callout arearefs="co.admsupport.script.done">
+     <para>
+      The feature was enabled (either by default or selected manually) and
+      executed successfully. The result is stored in a file (see <xref
+       linkend="tab.admsupport.features-and-filenames"/>).
+     </para>
+    </callout>
+    <callout arearefs="co.admsupport.script.skipped">
+     <para>
+      The feature was skipped because some files of one or more RPM packages
+      were changed.
+     </para>
+    </callout>
+    <callout arearefs="co.admsupport.script.excluded">
+     <para>
+      The feature was excluded because it was deselected via the <option>-x</option>
+      option.
+     </para>
+    </callout>
+    <callout arearefs="co.admsupport.script.plugin">
+     <para>
+      The script found one plugins and executes the plugin
+      <command>pstree</command>. The plugins was found in the directory
+      <filename class="directory">/usr/lib/supportconfig/plugins/</filename>.
+      See the man page for details.
+     </para>
+    </callout>
+    <callout arearefs="co.admsupport.script.archive">
+     <para>
+      The tar file name of the archive, by default compressed with <command>bzip2</command>.
+     </para>
+    </callout>
+   </calloutlist>
+  </sect2>
+
   <sect2 xml:id="sec.admsupport.options">
    <title>Common Supportconfig Options</title>
    <para>
@@ -427,8 +507,13 @@ Hard Disk:                /dev/sda 10 GB</screen>
       </para>
 <screen>&prompt.sudo;supportconfig -i LVM</screen>
       <para>
+       Additional keywords can be separated through commas. For example,
+       an additional disk test:
+      </para>
+      <screen>&prompt.sudo;supportconfig -i LVM,DISK</screen>
+      <para>
        For a complete list of feature keywords that you can use for limiting
-       the collected information to a specific area, run
+       the collected information to a specific area, run:
       </para>
 <screen>&prompt.sudo;supportconfig -F</screen>
      </listitem>
@@ -454,6 +539,393 @@ Hard Disk:                /dev/sda 10 GB</screen>
      </listitem>
     </varlistentry>
    </variablelist>
+  </sect2>
+  <sect2 xml:id="sec.admsupport.log">
+   <title>Overview of the Archive Content</title>
+   <para>
+    The tar archive contains all the results from the features. Depending on
+    what you have selected (all or only a small set), the archive can contain
+    more or less files.
+    The set of features can be limited through the <option>-i</option>
+    option (see <xref linkend="sec.admsupport.options"/>).
+   </para>
+   <para>
+    To list the content of the archive, use the following <command>tar</command>
+    command:
+   </para>
+   <screen>&prompt.root;<command>tar</command> xf /var/log/nts_&exampleclient;_180131_1545.tbz</screen>
+   <para>
+    The following filenames are always available inside the tar archive:
+   </para>
+   <variablelist>
+    <title>Minimal Files in Archive</title>
+    <varlistentry>
+     <term><filename>basic-environment.txt</filename></term>
+     <listitem>
+      <para>Contains the date when this script was executed and system information
+       like version of the distribution, hypervisor information and more.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term><filename>basic-health-check.txt</filename></term>
+     <listitem>
+      <para>
+       Contains some basic health checks like uptime, virtual memory statistics,
+       free memory and harddisk, checks for zombie processes, and more.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term><filename>hardware.txt</filename></term>
+     <listitem>
+      <para>
+       Contains basic hardware checks like information about the CPU architecture,
+       list of all connected hardware, interrupts, IO ports, kernel boot messages,
+       and more.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term><filename>messages.txt</filename></term>
+     <listitem>
+      <para>
+       Contains log messages from <filename>/var/log/warn</filename> and
+       <filename>/var/log/messages</filename>.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term><filename>rpm.txt</filename></term>
+     <listitem>
+      <para>Contains a list of all installed RPM packages, the name,
+      where they are coming from, and their versions.</para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term><filename>summary.xml</filename></term>
+     <listitem>
+      <para>Contains some information in XML format like distribution,
+      the version, and product specific fragments.</para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term><filename>supportconfig.txt</filename></term>
+     <listitem>
+      <para>
+       Contains information of the <command>supportconfig</command> script
+       itself.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term><filename>y2log.txt</filename></term>
+     <listitem>
+      <para>
+       Contains &yast; specific information like specific packages, configuration
+       files, and log files.
+      </para>
+     </listitem>
+    </varlistentry>
+   </variablelist>
+   <para>
+    <xref linkend="tab.admsupport.features-and-filenames"/> lists all available
+    features and their filenames. Further service packs can extend the list,
+    also plugins.
+   </para>
+   <table xml:id="tab.admsupport.features-and-filenames">
+    <title>Comparison of Features and Filenames in the Tar Archive</title>
+    <tgroup cols="2">
+     <thead>
+      <row>
+       <entry>Feature</entry>
+       <entry>Filename</entry>
+      </row>
+     </thead>
+     <tbody>
+      <row>
+       <entry><parameter>AFP</parameter></entry>
+       <entry><filename>novell-afp.txt</filename></entry>
+      </row>
+      <row>
+       <entry><parameter>APPARMOR</parameter></entry>
+       <entry><filename>security-apparmor.txt</filename></entry>
+      </row>
+      <row>
+       <entry><parameter>AUDIT</parameter></entry>
+       <entry><filename>security-audit.txt</filename></entry>
+      </row>
+      <row>
+       <entry><parameter>AUTOFS</parameter></entry>
+       <entry><filename>fs-autofs.txt</filename></entry>
+      </row>
+      <row>
+       <entry><parameter>BOOT</parameter></entry>
+       <entry><filename>boot.txt</filename></entry>
+      </row>
+      <row>
+       <entry><parameter>BTRFS</parameter></entry>
+       <entry><filename>fs-btrfs.txt</filename></entry>
+      </row>
+      <row>
+       <entry><parameter>DAEMONS</parameter></entry>
+       <entry><filename>chkconfig.txt</filename></entry>
+      </row>
+      <row>
+         <entry><parameter>CIFS</parameter></entry>
+         <entry><filename>novell-cifs.txt</filename></entry>
+      </row>
+      <row>
+         <entry><parameter>CIMOM</parameter></entry>
+         <entry><filename>cimom.txt</filename></entry>
+      </row>
+      <row>
+         <entry><parameter>CRASH</parameter></entry>
+         <entry><filename>crash.txt</filename></entry>
+      </row>
+      <row>
+         <entry><parameter>CRON</parameter></entry>
+         <entry><filename>cron.txt</filename></entry>
+      </row>
+      <row>
+         <entry><parameter>DFS</parameter></entry>
+         <entry><filename>novell-dfs.txt</filename></entry>
+      </row>
+      <row>
+         <entry><parameter>DHCP</parameter></entry>
+         <entry><filename>dhcp.txt</filename></entry>
+      </row>
+      <row>
+         <entry><parameter>DISK</parameter></entry>
+         <entry><filename>fs-diskio.txt</filename></entry>
+      </row>
+      <row>
+         <entry><parameter>DNS</parameter></entry>
+         <entry><filename>dns.txt</filename></entry>
+      </row>
+      <row>
+         <entry><parameter>DOCKER</parameter></entry>
+         <entry><filename>cocker.txt</filename></entry>
+      </row>
+      <row>
+         <entry><parameter>DRBD</parameter></entry>
+         <entry><filename>drbd.txt</filename></entry>
+      </row>
+      <row>
+         <entry><parameter>DSFW</parameter></entry>
+         <entry><filename>novell-dsfw.txt</filename></entry>
+      </row>
+      <row>
+         <entry><parameter>EDIR</parameter></entry>
+         <entry><filename>novell-edir.txt</filename></entry>
+      </row>
+      <row>
+         <entry><parameter>ENV</parameter></entry>
+         <entry><filename>env.txt</filename></entry>
+      </row>
+      <row>
+         <entry><parameter>ETC</parameter></entry>
+         <entry><filename>etc.txt</filename></entry>
+      </row>
+      <row>
+         <entry><parameter>EVMS</parameter></entry>
+         <entry><filename>evms.txt</filename></entry>
+      </row>
+      <row>
+         <entry><parameter>HA</parameter></entry>
+         <entry><filename>ha.txt</filename></entry>
+      </row>
+      <row>
+         <entry><parameter>HAPROXY</parameter></entry>
+         <entry><filename>haproxy.txt</filename></entry>
+      </row>
+      <row>
+         <entry><parameter>HISTORY</parameter></entry>
+         <entry><filename>shell_history.txt</filename></entry>
+      </row>
+      <row>
+         <entry><parameter>IB</parameter></entry>
+         <entry><filename>ib.txt</filename></entry>
+      </row>
+      <row>
+         <entry><parameter>IMAN</parameter></entry>
+         <entry><filename>novell-iman.txt</filename></entry>
+      </row>
+      <row>
+         <entry><parameter>ISCSI</parameter></entry>
+         <entry><filename>fs-iscsi.txt</filename></entry>
+      </row>
+      <row>
+         <entry><parameter>KVM</parameter></entry>
+         <entry><filename>kvm.txt</filename></entry>
+      </row>
+      <row>
+         <entry><parameter>LDAP</parameter></entry>
+         <entry><filename>ldap.txt</filename></entry>
+      </row>
+      <row>
+         <entry><parameter>LUM</parameter></entry>
+         <entry><filename>novell-lum.txt</filename></entry>
+      </row>
+      <row>
+         <entry><parameter>LVM</parameter></entry>
+         <entry><filename>lvm.txt</filename></entry>
+      </row>
+      <row>
+         <entry><parameter>LXC</parameter></entry>
+         <entry><filename>lxc.txt</filename></entry>
+      </row>
+      <row>
+         <entry><parameter>MEM</parameter></entry>
+         <entry><filename>memory.txt</filename></entry>
+      </row>
+      <row>
+         <entry><parameter>MOD</parameter></entry>
+         <entry><filename>modules.txt</filename></entry>
+      </row>
+      <row>
+         <entry><parameter>MPIO</parameter></entry>
+         <entry><filename>mpio.txt</filename></entry>
+      </row>
+      <row>
+         <entry><parameter>NCP</parameter></entry>
+         <entry><filename>novell-ncp.txt</filename></entry>
+      </row>
+      <row>
+         <entry><parameter>NCS</parameter></entry>
+         <entry><filename>novell-ncs.txt</filename></entry>
+      </row>
+      <row>
+         <entry><parameter>NET</parameter></entry>
+         <entry><filename>network-*.txt</filename></entry>
+      </row>
+      <row>
+         <entry><parameter>NFS</parameter></entry>
+         <entry><filename>nfs.txt</filename></entry>
+      </row>
+      <row>
+         <entry><parameter>NIT</parameter></entry>
+         <entry><filename>novell-nit.txt</filename></entry>
+      </row>
+      <row>
+         <entry><parameter>NSS</parameter></entry>
+         <entry><filename>novell-nss.txt</filename></entry>
+      </row>
+      <row>
+         <entry><parameter>NTP</parameter></entry>
+         <entry><filename>ntp.txt</filename></entry>
+      </row>
+      <row>
+         <entry><parameter>OCFS2</parameter></entry>
+         <entry><filename>ocfs2.txt</filename></entry>
+      </row>
+      <row>
+         <entry><parameter>OES</parameter></entry>
+         <entry>n/a</entry>
+      </row>
+      <row>
+         <entry><parameter>OFILES</parameter></entry>
+         <entry><filename>open-files.txt</filename></entry>
+      </row>
+      <row>
+         <entry><parameter>PAM</parameter></entry>
+         <entry><filename>pam.txt</filename></entry>
+      </row>
+      <row>
+         <entry><parameter>PRINT</parameter></entry>
+         <entry><filename>print.txt</filename></entry>
+      </row>
+      <row>
+         <entry><parameter>PROC</parameter></entry>
+         <entry><filename>proc.txt</filename></entry>
+      </row>
+      <row>
+         <entry><parameter>PROXY</parameter></entry>
+         <entry><filename>novell-proxymgmt.txt</filename></entry>
+      </row>
+      <row>
+         <entry><parameter>SAM</parameter></entry>
+         <entry><filename>sam.txt</filename></entry>
+      </row>
+      <row>
+         <entry><parameter>SAR</parameter></entry>
+         <entry><filename>sar.txt</filename></entry>
+      </row>
+      <row>
+         <entry><parameter>SLERT</parameter></entry>
+         <entry><filename>slert.txt</filename></entry>
+      </row>
+      <row>
+         <entry><parameter>SLP</parameter></entry>
+         <entry><filename>slp.txt</filename></entry>
+      </row>
+      <row>
+         <entry><parameter>SMT</parameter></entry>
+         <entry><filename>smt.txt</filename></entry>
+      </row>
+      <row>
+         <entry><parameter>SMART</parameter></entry>
+         <entry><filename>fs-smartmon.txt</filename></entry>
+      </row>
+      <row>
+         <entry><parameter>SMB</parameter></entry>
+         <entry><filename>samba.txt</filename></entry>
+      </row>
+      <row>
+         <entry><parameter>SMS</parameter></entry>
+         <entry><filename>novell-sms.txt</filename></entry>
+      </row>
+      <row>
+         <entry><parameter>SRAID</parameter></entry>
+         <entry><filename>fs-softraid.txt</filename></entry>
+      </row>
+      <row>
+         <entry><parameter>SSH</parameter></entry>
+         <entry><filename>ssh.txt</filename></entry>
+      </row>
+      <row>
+         <entry><parameter>SSSD</parameter></entry>
+         <entry><filename>sssd.txt</filename></entry>
+      </row>
+      <row>
+         <entry><parameter>SYSCONFIG</parameter></entry>
+         <entry><filename>sysconfig.txt</filename></entry>
+      </row>
+      <row>
+         <entry><parameter>SYSFS</parameter></entry>
+         <entry><filename>sysfs.txt</filename></entry>
+      </row>
+      <row>
+         <entry><parameter>UDEV</parameter></entry>
+         <entry><filename>udev.txt</filename></entry>
+      </row>
+      <row>
+         <entry><parameter>UFILES</parameter></entry>
+         <entry><filename>fs-files-additional.txt</filename></entry>
+      </row>
+      <row>
+         <entry><parameter>UP</parameter></entry>
+         <entry><filename>updates.txt</filename></entry>
+      </row>
+      <row>
+         <entry><parameter>UPD</parameter></entry>
+         <entry><filename>updates-daemon.txt</filename></entry>
+      </row>
+      <row>
+         <entry><parameter>WEB</parameter></entry>
+         <entry><filename>web.txt</filename></entry>
+      </row>
+      <row>
+         <entry><parameter>X</parameter></entry>
+         <entry><filename>x.txt</filename></entry>
+      </row>
+      <row>
+         <entry><parameter>XEN</parameter></entry>
+         <entry><filename>xen.txt</filename></entry>
+      </row>
+     </tbody>
+    </tgroup>
+   </table>
   </sect2>
  </sect1>
  <sect1 xml:id="sec.admsupport.submit">
