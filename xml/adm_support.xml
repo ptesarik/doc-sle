@@ -115,7 +115,7 @@ Hard Disk:                /dev/sda 10 GB</screen>
    <title>Creating a Service Request Number</title>
    <para>
     Supportconfig archives can be generated at any time. However, for
-    handing over the supportconfig data to Global Technical Support, you need
+    handing over the Supportconfig data to Global Technical Support, you need
     to generate a service request number first. You will need it to upload the
     archive to support.
    </para>
@@ -139,7 +139,7 @@ Hard Disk:                /dev/sda 10 GB</screen>
    <title>Upload Targets</title>
    <para>
     After having created a service request number, you can upload your
-    supportconfig archives to Global Technical Support as described in
+    Supportconfig archives to Global Technical Support as described in
     <xref linkend="pro.admsupport.submit.yast"/> or
     <xref linkend="pro.admsupport.submit.cli"/>. Use one of the following
     upload targets:
@@ -225,7 +225,7 @@ Hard Disk:                /dev/sda 10 GB</screen>
     </step>
     <step>
      <para>
-      In the next window, select one of the supportconfig options from the
+      In the next window, select one of the Supportconfig options from the
       radio button list. <guimenu>Use Custom (Expert) Settings</guimenu> is
       preselected by default. If you want to test the report function first,
       use <guimenu>Only gather a minimum amount of info</guimenu>. For some
@@ -326,7 +326,7 @@ Hard Disk:                /dev/sda 10 GB</screen>
   <sect2 xml:id="sec.admsupport.cli">
    <title>Creating a Supportconfig Archive from Command Line</title>
    <para>
-    The following procedure shows how to create a supportconfig archive, but
+    The following procedure shows how to create a Supportconfig archive, but
     without submitting it to support directly. For uploading it, you need to
     run the command with certain options as described in
     <xref linkend="pro.admsupport.submit.cli"/>.
@@ -397,7 +397,7 @@ Hard Disk:                /dev/sda 10 GB</screen>
   <sect2 xml:id="sec.admsupport.supportconfig.log">
    <title>Understanding the Output of <command>supportconfig</command></title>
    <para>
-    Wheather you run <command>supportconfig</command> through &yast; or directly,
+    Weather you run <command>supportconfig</command> through &yast; or directly,
     the script gives you a summary of what it did.
    </para>
    <screen>                     Support Utilities - Supportconfig
@@ -502,7 +502,7 @@ Creating Tar Ball
        information to the specific area for the next
        <command>supportconfig</command> run. For example, if you detected
        problems with LVM and want to test a recent change that you did to the
-       LVM configuration, it makes sense to gather the minimum supportconfig
+       LVM configuration, it makes sense to gather the minimum Supportconfig
        information around LVM only:
       </para>
 <screen>&prompt.sudo;supportconfig -i LVM</screen>
@@ -555,7 +555,7 @@ Creating Tar Ball
    </para>
    <screen>&prompt.root;<command>tar</command> xf /var/log/nts_&exampleclient;_180131_1545.tbz</screen>
    <para>
-    The following filenames are always available inside the tar archive:
+    The following file names are always available inside the tar archive:
    </para>
    <variablelist>
     <title>Minimal Files in Archive</title>
@@ -572,7 +572,7 @@ Creating Tar Ball
      <listitem>
       <para>
        Contains some basic health checks like uptime, virtual memory statistics,
-       free memory and harddisk, checks for zombie processes, and more.
+       free memory and hard disk, checks for zombie processes, and more.
       </para>
      </listitem>
     </varlistentry>
@@ -630,16 +630,16 @@ Creating Tar Ball
    </variablelist>
    <para>
     <xref linkend="tab.admsupport.features-and-filenames"/> lists all available
-    features and their filenames. Further service packs can extend the list,
+    features and their file names. Further service packs can extend the list,
     also plugins.
    </para>
    <table xml:id="tab.admsupport.features-and-filenames">
-    <title>Comparison of Features and Filenames in the Tar Archive</title>
+    <title>Comparison of Features and File names in the Tar Archive</title>
     <tgroup cols="2">
      <thead>
       <row>
        <entry>Feature</entry>
-       <entry>Filename</entry>
+       <entry>File name</entry>
       </row>
      </thead>
      <tbody>
@@ -951,11 +951,11 @@ Creating Tar Ball
    <title>Submitting Information to Support with &yast;</title>
    <para>
     The following procedure assumes that you have already created a
-    supportconfig archive, but have not uploaded it yet. Make sure to have
+    Supportconfig archive, but have not uploaded it yet. Make sure to have
     included your contact information in the archive as described in
     <xref linkend="sec.admsupport.yast"/>,
     <xref linkend="step.supportconfig.contact" xrefstyle="select:label nopage"/>.
-    For instructions on how to generate and submit a supportconfig archive in
+    For instructions on how to generate and submit a Supportconfig archive in
     one go, see <xref linkend="sec.admsupport.yast"/>.
    </para>
    <step>
@@ -971,7 +971,7 @@ Creating Tar Ball
    <step>
     <para>
      In <guimenu>Package with log files</guimenu> specify the path to the
-     existing supportconfig archive or <guimenu>Browse</guimenu> for it.
+     existing Supportconfig archive or <guimenu>Browse</guimenu> for it.
     </para>
    </step>
    <step xml:id="step.supportcfg.submit.upltarget">
@@ -1011,8 +1011,8 @@ Creating Tar Ball
    <title>Submitting Information to Support from Command Line</title>
    <para>
     The following procedure assumes that you have already created a
-    supportconfig archive, but have not uploaded it yet. For instructions on
-    how to generate and submit a supportconfig archive in one go, see
+    Supportconfig archive, but have not uploaded it yet. For instructions on
+    how to generate and submit a Supportconfig archive in one go, see
     <xref linkend="sec.admsupport.yast"/>.
    </para>
    <step>
@@ -1077,26 +1077,26 @@ Creating Tar Ball
    <literal>Supportconfig Analysis</literal> (SCA). The SCA appliance is a
    server-side tool which is non-interactive. The SCA tool
    (<command>scatool</command>) runs on the client-side and is executed from
-   command line. Both tools analyze supportconfig archives from affected
+   command line. Both tools analyze Supportconfig archives from affected
    servers. The initial server analysis takes place on the SCA appliance or the
-   workstation on which scatool is running. No analysis cycles happen on the
+   workstation on which <command>scatool</command> is running. No analysis cycles happen on the
    production server.
   </para>
 
   <para>
    Both the appliance and the command line tool additionally need
-   product-specific patterns that enable them to analyze the supportconfig
+   product-specific patterns that enable them to analyze the Supportconfig
    output for the associated products. Each pattern is a script that parses and
-   evaluates a supportconfig archive for one known issue. The patterns are
+   evaluates a Supportconfig archive for one known issue. The patterns are
    available as RPM packages.
   </para>
 
   <para>
-   For example, if you want to analyze supportconfig archives that have been
+   For example, if you want to analyze Supportconfig archives that have been
    generated on a &sle; 11 machine, you need to install the package
    <systemitem class="resource">sca-patterns-sle11</systemitem> together with
    the SCA tool (or on the machine that you want to use as the SCA appliance
-   server). To analyze supportconfig archives generated on a &sle; 15 machine,
+   server). To analyze Supportconfig archives generated on a &sle; 15 machine,
    you need the package
    <systemitem class="resource">sca-patterns-sle15</systemitem>.
   </para>
@@ -1154,12 +1154,12 @@ Creating Tar Ball
      </term>
      <listitem>
       <para>
-       Calls <command>supportconfig</command> and generates a new supportconfig
+       Calls <command>supportconfig</command> and generates a new Supportconfig
        archive on the local machine. Analyzes the archive for known issues by
        applying the SCA analysis patterns that match the installed product.
        Displays the path to the HTML report that is generated from the results
        of the analysis. It is usually written to the same directory where the
-       supportconfig archive can be found.
+       Supportconfig archive can be found.
       </para>
      </listitem>
     </varlistentry>
@@ -1179,9 +1179,9 @@ Creating Tar Ball
      </term>
      <listitem>
       <para>
-       Analyzes the specified supportconfig archive file (or the specified
-       directory to where the supportconfig archive has been extracted). The
-       generated HTML report is saved in the same location as the supportconfig
+       Analyzes the specified Supportconfig archive file (or the specified
+       directory to where the Supportconfig archive has been extracted). The
+       generated HTML report is saved in the same location as the Supportconfig
        archive or directory.
       </para>
      </listitem>
@@ -1193,10 +1193,10 @@ Creating Tar Ball
       <para>
        Establishes an SSH connection to an external server
        <replaceable>SLES_SERVER.COMPANY.COM</replaceable> and runs
-       <command>supportconfig</command> on the server. The supportconfig
+       <command>supportconfig</command> on the server. The Supportconfig
        archive is then copied back to the local machine and is analyzed there.
        The generated HTML report is saved to the default
-       <filename>/var/log</filename> directory. (Only the supportconfig archive
+       <filename>/var/log</filename> directory. (Only the Supportconfig archive
        is created on <replaceable>SLES_SERVER.COMPANY.COM</replaceable>).
       </para>
      </listitem>
@@ -1221,13 +1221,13 @@ Creating Tar Ball
   <sect2 xml:id="sec.admsupport.sca.appliance">
    <title>SCA Appliance</title>
    <para>
-    If you decide to use the SCA appliance for analyzing the supportconfig
+    If you decide to use the SCA appliance for analyzing the Supportconfig
     archives, you need to configure a dedicated server (or virtual machine) as
     the SCA appliance server. The SCA appliance server can then be used to
-    analyze supportconfig archives from all machines in your enterprise running
-    &sls; or &sled;. You can simply upload supportconfig archives to the
+    analyze Supportconfig archives from all machines in your enterprise running
+    &sls; or &sled;. You can simply upload Supportconfig archives to the
     appliance server for analysis. Interaction is not required. In a MariaDB
-    database, the SCA appliance keeps track of all supportconfig archives that
+    database, the SCA appliance keeps track of all Supportconfig archives that
     have been analyzed . You can read the SCA reports directly from the
     appliance Web interface. Alternatively, you can have the appliance send the
     HTML report to any administrative user via e-mail. For details, see
@@ -1270,7 +1270,7 @@ Creating Tar Ball
      <para>
       After the appliance is set up and running, no more manual interaction is
       required. This way of setting up the appliance is therefore ideal for
-      using cron jobs to create and upload supportconfig archives.
+      using cron jobs to create and upload Supportconfig archives.
      </para>
      <step>
       <para>
@@ -1347,7 +1347,7 @@ setup-sca</screen>
        The <systemitem class="resource">sca-patterns-base</systemitem> package.
        Additionally, any of the product-specific
        <systemitem class="resource">sca-patterns-*</systemitem> for the type of
-       supportconfig archives that you want to analyze with the appliance.
+       Supportconfig archives that you want to analyze with the appliance.
       </para>
      </listitem>
      <listitem>
@@ -1420,7 +1420,7 @@ setup-sca</screen>
      </para>
      <para>
       It can be used to configure the following options you have for uploading
-      the supportconfig archives from your machines to the SCA appliance:
+      the Supportconfig archives from your machines to the SCA appliance:
      </para>
      <itemizedlist mark="bullet" spacing="normal">
       <listitem>
@@ -1443,7 +1443,7 @@ setup-sca</screen>
      <step>
       <para>
        Additionally, install the pattern packages for the types of
-       supportconfig archives you want to analyze. For example, if you have
+       Supportconfig archives you want to analyze. For example, if you have
        &sls; 11 and &sls; 12 servers in your environment, install both the
        <systemitem>sca-patterns-sle11</systemitem> and
        <systemitem>sca-patterns-sle12</systemitem> packages.
@@ -1457,7 +1457,7 @@ setup-sca</screen>
       <para>
        For basic setup of the SCA appliance, use the
        <command>setup-sca</command> script. How to call it depends on how you
-       want to upload the supportconfig archives to the SCA appliance server:
+       want to upload the Supportconfig archives to the SCA appliance server:
       </para>
       <itemizedlist mark="bullet" spacing="normal">
        <listitem>
@@ -1481,7 +1481,7 @@ setup-sca</screen>
        </listitem>
        <listitem>
         <para>
-         If you want to upload supportconfig files to the
+         If you want to upload Supportconfig files to the
          <filename>/tmp</filename> directory of the SCA appliance server via
          <command>scp</command>, call the setup script without any parameters
          and follow the instructions on the screen:
@@ -1529,7 +1529,7 @@ setup-sca</screen>
      <title>Data Protection</title>
      <para>
       As the reports on the SCA appliance server contain security-relevant
-      information of the machines whose supportconfig archives have been
+      information of the machines whose Supportconfig archives have been
       analyzed, make sure to protect the data on the SCA appliance server
       against unauthorized access.
      </para>
@@ -1538,8 +1538,8 @@ setup-sca</screen>
    <sect3 xml:id="sec.admsupport.sca.appliance.use">
     <title>Using the SCA Appliance</title>
     <para>
-     You can upload existing supportconfig archives to the SCA appliance
-     manually or create new supportconfig archives and upload them to the SCA
+     You can upload existing Supportconfig archives to the SCA appliance
+     manually or create new Supportconfig archives and upload them to the SCA
      appliance in one step. Uploading can be done via FTP or SCP. For both, you
      need to know the URL where the SCA appliance can be reached. For upload
      via FTP, an FTP server needs to be configured for the SCA appliance, see
@@ -1551,14 +1551,14 @@ setup-sca</screen>
      <itemizedlist mark="bullet" spacing="normal">
       <listitem>
        <para>
-        For creating a supportconfig archive and uploading it via (anonymous)
+        For creating a Supportconfig archive and uploading it via (anonymous)
         FTP:
        </para>
 <screen>&prompt.sudo;supportconfig -U “ftp://<replaceable>SCA-APPLIANCE.COMPANY.COM</replaceable>/upload”</screen>
       </listitem>
       <listitem>
        <para>
-        For creating a supportconfig archive and uploading it via SCP:
+        For creating a Supportconfig archive and uploading it via SCP:
        </para>
 <screen>&prompt.sudo;supportconfig -U “scp://<replaceable>SCA-APPLIANCE.COMPANY.COM</replaceable>/tmp”</screen>
        <para>
@@ -1630,7 +1630,7 @@ setup-sca</screen>
        <para>
         In the <guimenu>Message</guimenu> column, click an individual entry.
 <!--pattern result title-->
-        This opens the corresponding article in the &suse; Knowledgebase. Read
+        This opens the corresponding article in the &suse; Knowledge base. Read
         the proposed solution and follow the instructions.
        </para>
       </step>
@@ -1644,7 +1644,7 @@ setup-sca</screen>
       </step>
       <step>
        <para>
-        Check the &suse; Knowledgebase
+        Check the &suse; Knowledge base
         (<link xlink:href="http://www.suse.com/support/kb/"/>) for results that
         directly relate to the problem identified by SCA. Work at resolving
         them.
@@ -1759,10 +1759,10 @@ setup-sca</screen>
     <sect4 xml:id="sec.admsupport.sca.appliance.config.archive">
      <title>Archiving Mode</title>
      <para>
-      All supportconfig archives are deleted from the SCA appliance after they
+      All Supportconfig archives are deleted from the SCA appliance after they
       have been analyzed and their results have been stored in the MariaDB
       database. However, for troubleshooting purposes it can be useful to keep
-      copies of supportconfig archives from a machine. By default, archiving
+      copies of Supportconfig archives from a machine. By default, archiving
       mode is disabled.
      </para>
      <procedure>
@@ -1797,14 +1797,14 @@ setup-sca</screen>
      </procedure>
      <para>
       After having enabled archive mode, the SCA appliance will save the
-      supportconfig files to the <filename>/var/log/archives/saved</filename>
+      Supportconfig files to the <filename>/var/log/archives/saved</filename>
       directory, instead of deleting them.
      </para>
     </sect4>
     <sect4 xml:id="sec.admsupport.sca.appliance.config.mail">
      <title>Sending SCA Reports via E-Mail</title>
      <para>
-      The SCA appliance can e-mail a report HTML file for each supportconfig
+      The SCA appliance can e-mail a report HTML file for each Supportconfig
       analyzed. This feature is disabled by default. When enabling it, you can
       define a list of e-mail addresses to which the reports should be sent,
       and define a level of status messages that trigger the sending of reports
@@ -2056,10 +2056,10 @@ setup-sca</screen>
     The SCA appliance comes with a complete pattern development environment
     (the SCA Pattern Database) that enables you to develop your own, custom
     patterns. Patterns can be written in any programming language. To make them
-    available for the supportconfig analysis process, they need to be saved to
+    available for the Supportconfig analysis process, they need to be saved to
     <filename>/usr/lib/sca/patterns/local</filename> and to be made executable.
     Both the SCA appliance and the SCA tool will then run the custom patterns
-    against new supportconfig archives as part of the analysis report. For
+    against new Supportconfig archives as part of the analysis report. For
     detailed instructions on how to create (and test) your own patterns, see
     <link xlink:href="http://www.suse.com/communities/conversations/sca-pattern-development/"/>.
    </para>
@@ -2265,7 +2265,7 @@ setup-sca</screen>
    <listitem>
     <para>
      <command>man supportconfig.conf</command>&mdash;The man page of the
-     supportconfig configuration file.
+     Supportconfig configuration file.
     </para>
    </listitem>
    <listitem>
