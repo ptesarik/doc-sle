@@ -103,9 +103,18 @@ Hard Disk:                /dev/sda 10 GB</screen>
 
   <para>
    To create a TAR archive with detailed system information that you can hand
-   over to Global Technical Support, use either the
-   <command>supportconfig</command> command line tool directly or the &yast;
-   <guimenu>Support</guimenu> module. The command line tool is provided by the
+   over to Global Technical Support, use either:
+  </para>
+  <itemizedlist>
+   <listitem>
+    <para>the command <command>supportconfig</command> or, </para>
+   </listitem>
+   <listitem>
+    <para>the &yast; <guimenu>Support</guimenu> module.</para>
+   </listitem>
+  </itemizedlist>
+  <para>
+   The command line tool is provided by the
    package <systemitem>supportutils</systemitem> which is installed by default.
    The &yast; <guimenu>Support</guimenu> module is also based on the command
    line tool.
@@ -236,14 +245,14 @@ Hard Disk:                /dev/sda 10 GB</screen>
       Proceed with <guimenu>Next</guimenu>.
      </para>
     </step>
-    <step xml:id="step.supportconfig.contact">
+    <step xml:id="st.supportconfig.contact">
      <para>
       Enter your contact information. It will be written to a file called
       <filename>basic-environment.txt</filename> and included in the archive to
       be created.
      </para>
     </step>
-    <step xml:id="step.supportconfig.upload.target">
+    <step xml:id="st.supportconfig.upload.target">
      <para>
       If you want to submit the archive to Global Technical Support at the end
       of the information collection process, <guimenu>Upload
@@ -303,7 +312,7 @@ Hard Disk:                /dev/sda 10 GB</screen>
       If you want to upload the archive to support directly, make sure
       <guimenu>Upload log files tarball to URL</guimenu> is activated. The
       <guimenu>Upload Target</guimenu> shown here is the one that &yast;
-      proposes in <xref linkend="step.supportconfig.upload.target"/>. If you
+      proposes in <xref linkend="st.supportconfig.upload.target"/>. If you
       want to modify the upload target, find detailed information of which
       upload servers are available in
       <xref linkend="sec.admsupport.supportconfig.upload"/>.
@@ -339,7 +348,7 @@ Hard Disk:                /dev/sda 10 GB</screen>
     </step>
     <step>
      <para>
-      Run <command>supportconfig</command>. In most cases, it is enough to
+      Run <command>supportconfig</command>. Usually, it is enough to
       run this tool without any options. Some options are very common and
       are displayed in the following list:
      </para>
@@ -351,7 +360,7 @@ Hard Disk:                /dev/sda 10 GB</screen>
        <term><option>-P <replaceable>PHONE</replaceable></option></term>
        <listitem>
         <para>
-         Sets your contact data: email address (<option>-E</option>), company
+         Sets your contact data: e-mail address (<option>-E</option>), company
          name (<option>-O</option>), your name (<option>-N</option>), and
          your phone number (<option>-P</option>).
         </para>
@@ -454,7 +463,7 @@ Creating Tar Ball
     </callout>
     <callout arearefs="co.admsupport.script.excluded">
      <para>
-      The feature was excluded because it was deselected via the <option>-x</option>
+      The feature was excluded because it was unselected via the <option>-x</option>
       option.
      </para>
     </callout>
@@ -496,14 +505,14 @@ Creating Tar Ball
      <term>Limiting the Information to a Specific Topic</term>
      <listitem>
       <para>
-       If you have already localized a problem with the default
-       <command>supportconfig</command> output and have found that it relates
+       If you have already localized a problem <!--with the default
+       <command>supportconfig</command> output and have found--> that relates
        to a specific area or feature set only, you should limit the collected
        information to the specific area for the next
        <command>supportconfig</command> run. For example, if you detected
        problems with LVM and want to test a recent change that you did to the
-       LVM configuration, it makes sense to gather the minimum Supportconfig
-       information around LVM only:
+       LVM configuration. In that case it makes sense to gather the minimum
+       Supportconfig information around LVM only:
       </para>
 <screen>&prompt.sudo;supportconfig -i LVM</screen>
       <para>
@@ -543,7 +552,7 @@ Creating Tar Ball
   <sect2 xml:id="sec.admsupport.log">
    <title>Overview of the Archive Content</title>
    <para>
-    The tar archive contains all the results from the features. Depending on
+    The TAR archive contains all the results from the features. Depending on
     what you have selected (all or only a small set), the archive can contain
     more or less files.
     The set of features can be limited through the <option>-i</option>
@@ -555,7 +564,7 @@ Creating Tar Ball
    </para>
    <screen>&prompt.root;<command>tar</command> xf /var/log/nts_&exampleclient;_180131_1545.tbz</screen>
    <para>
-    The following file names are always available inside the tar archive:
+    The following file names are always available inside the TAR archive:
    </para>
    <variablelist>
     <title>Minimal Files in Archive</title>
@@ -634,7 +643,7 @@ Creating Tar Ball
     also plugins.
    </para>
    <table xml:id="tab.admsupport.features-and-filenames">
-    <title>Comparison of Features and File names in the Tar Archive</title>
+    <title>Comparison of Features and File names in the TAR Archive</title>
     <tgroup cols="2">
      <thead>
       <row>
@@ -954,7 +963,7 @@ Creating Tar Ball
     Supportconfig archive, but have not uploaded it yet. Make sure to have
     included your contact information in the archive as described in
     <xref linkend="sec.admsupport.yast"/>,
-    <xref linkend="step.supportconfig.contact" xrefstyle="select:label nopage"/>.
+    <xref linkend="st.supportconfig.contact" xrefstyle="select:label nopage"/>.
     For instructions on how to generate and submit a Supportconfig archive in
     one go, see <xref linkend="sec.admsupport.yast"/>.
    </para>
@@ -974,7 +983,7 @@ Creating Tar Ball
      existing Supportconfig archive or <guimenu>Browse</guimenu> for it.
     </para>
    </step>
-   <step xml:id="step.supportcfg.submit.upltarget">
+   <step xml:id="st.supportcfg.submit.upltarget">
     <para>
      &yast; automatically proposes an upload server. If you want to modify it,
      refer to <xref linkend="sec.admsupport.supportconfig.upload"/> for details
@@ -1091,15 +1100,15 @@ Creating Tar Ball
    available as RPM packages.
   </para>
 
-  <para>
+  <!--<para>
    For example, if you want to analyze Supportconfig archives that have been
-   generated on a &sle; 11 machine, you need to install the package
-   <systemitem class="resource">sca-patterns-sle11</systemitem> together with
+   generated on a &sle; 12 machine, install the package
+   <systemitem class="resource">sca-patterns-sle12</systemitem> together with
    the SCA tool (or on the machine that you want to use as the SCA appliance
    server). To analyze Supportconfig archives generated on a &sle; 15 machine,
    you need the package
    <systemitem class="resource">sca-patterns-sle15</systemitem>.
-  </para>
+  </para>-->
 
   <para>
    You can also develop your own patterns as briefly described in
@@ -1128,20 +1137,20 @@ Creating Tar Ball
    </figure>
    <para>
     The <command>scatool</command> command is provided by the
-    <systemitem class="resource">sca-server-report</systemitem> package. It is
+    <package>sca-server-report</package> package. It is
     not installed by default. Additionally, you need the
-    <systemitem class="resource">sca-patterns-base</systemitem> package and any
+    <package>sca-patterns-base</package> package and any
     of the product-specific
-    <systemitem class="resource">sca-patterns-*</systemitem> packages that
+    <package>sca-patterns-*</package> packages that
     matches the product installed on the machine where you want to run the
     <command>scatool</command> command.
    </para>
    <para>
     Execute the <command>scatool</command> command either as &rootuser; user or
-    with <command>sudo</command>. When calling the SCA tool, you can either
-    analyze an existing <command>supportconfig</command> TAR archive or you can
+    with <command>sudo</command>. When calling the SCA tool, either
+    analyze an existing <command>supportconfig</command> TAR archive or
     let it generate and analyze a new archive in one go. The tool also provides
-    an interactive console (with tab completion) and the possibility to run
+    an interactive console with tab completion. It is possible to run
     <command>supportconfig</command> on an external machine and to execute the
     subsequent analysis on the local machine.
    </para>
@@ -1222,7 +1231,7 @@ Creating Tar Ball
    <title>SCA Appliance</title>
    <para>
     If you decide to use the SCA appliance for analyzing the Supportconfig
-    archives, you need to configure a dedicated server (or virtual machine) as
+    archives, configure a dedicated server (or virtual machine) as
     the SCA appliance server. The SCA appliance server can then be used to
     analyze Supportconfig archives from all machines in your enterprise running
     &sls; or &sled;. You can simply upload Supportconfig archives to the
@@ -1444,9 +1453,9 @@ setup-sca</screen>
       <para>
        Additionally, install the pattern packages for the types of
        Supportconfig archives you want to analyze. For example, if you have
-       &sls; 11 and &sls; 12 servers in your environment, install both the
-       <systemitem>sca-patterns-sle11</systemitem> and
-       <systemitem>sca-patterns-sle12</systemitem> packages.
+       &sls; 12 and &sls; 15 servers in your environment, install both the
+       <systemitem>sca-patterns-sle12</systemitem> and
+       <systemitem>sca-patterns-sle15</systemitem> packages.
       </para>
       <para>
        To install all available patterns:
@@ -1464,7 +1473,7 @@ setup-sca</screen>
         <para>
          If you have configured an anonymous FTP server that uses the
          <filename>/srv/ftp/upload</filename> directory, execute the setup
-         script with the <option>-f</option> option and follow the instructions
+         script with the <option>-f</option> option. Follow the instructions
          on the screen:
         </para>
 <screen>&prompt.sudo;setup-sca -f</screen>
@@ -1483,8 +1492,8 @@ setup-sca</screen>
         <para>
          If you want to upload Supportconfig files to the
          <filename>/tmp</filename> directory of the SCA appliance server via
-         <command>scp</command>, call the setup script without any parameters
-         and follow the instructions on the screen:
+         <command>scp</command>, call the setup script without any parameters.
+         Follow the instructions on the screen:
         </para>
 <screen>&prompt.sudo;setup-sca</screen>
        </listitem>
@@ -1529,8 +1538,8 @@ setup-sca</screen>
      <title>Data Protection</title>
      <para>
       As the reports on the SCA appliance server contain security-relevant
-      information of the machines whose Supportconfig archives have been
-      analyzed, make sure to protect the data on the SCA appliance server
+      information<!-- of the machines whose Supportconfig archives have been
+      analyzed-->, make sure to protect the data on the SCA appliance server
       against unauthorized access.
      </para>
     </warning>
@@ -1806,8 +1815,8 @@ setup-sca</screen>
      <para>
       The SCA appliance can e-mail a report HTML file for each Supportconfig
       analyzed. This feature is disabled by default. When enabling it, you can
-      define a list of e-mail addresses to which the reports should be sent,
-      and define a level of status messages that trigger the sending of reports
+      define a list of e-mail addresses to which the reports should be sent.
+      Define a level of status messages that trigger the sending of reports
       (<literal>STATUS_NOTIFY_LEVEL</literal>).
      </para>
      <variablelist xml:id="vl.sca.mails.notify.level">
@@ -1840,7 +1849,7 @@ setup-sca</screen>
        <term>$STATUS_RECOMMEND</term>
        <listitem>
         <para>
-         Send only SCA reports that include a RECOMMEND, WARNING or CRITICAL.
+         Send only SCA reports that include an RECOMMEND, WARNING or CRITICAL.
         </para>
        </listitem>
       </varlistentry>
@@ -2147,8 +2156,8 @@ setup-sca</screen>
      If the <literal>supported</literal> flag is not set, loading this module
      will taint the kernel. Tainted kernels are not supported. Unsupported
      Kernel modules are included in an extra RPM package
-     (<systemitem>kernel-<replaceable>FLAVOR</replaceable>-extra</systemitem>)
-     that is only available for &sled; and the &sle; Workstation Extension.
+     (<systemitem>kernel-<replaceable>FLAVOR</replaceable>-extra</systemitem>).
+     That package is only available for &sled; and the &sle; Workstation Extension.
      Those kernels will not be loaded by default
      (<replaceable>FLAVOR</replaceable>=<literal>default</literal>|<literal>xen</literal>|...).
      In addition, these unsupported modules are not available in the installer,
@@ -2206,8 +2215,8 @@ setup-sca</screen>
    <title>Working with Unsupported Modules</title>
    <para>
     While general supportability is important, situations can occur where
-    loading an unsupported module is required (for example, for testing or
-    debugging purposes, or if your hardware vendor provides a hotfix).
+    loading an unsupported module is required. For example, for testing or
+    debugging purposes, or if your hardware vendor provides a hotfix.
    </para>
    <itemizedlist mark="bullet" spacing="normal">
     <listitem>
