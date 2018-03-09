@@ -47,8 +47,9 @@
    The easiest and recommended way to register is to do it during the
    installation. It will not only allow you to install the latest patch level
    of &productname;, but you will also get access to all modules and extensions
-   without having to porovide an additional installation media.  For details on
-   the registration process refer to <xref
+   without having to provide an additional installation media. THis also
+   applies to all modules or extension you install. For details on the
+   registration process refer to <xref
    linkend="sec.yast_install.scc_registration"/>.
   </para>
   <para>
@@ -72,7 +73,7 @@
   <title>Registering from the Installed System</title>
   <para>
    If you have skipped the registration during the installation or want to
-   re-register your system, you can register the system at any time using the
+   re-register your system, you can do so at any time using the
    YaST module <guimenu>Product Registration</guimenu> or the command line tool
    <command>SUSEConnect</command>.
   </para>
@@ -82,7 +83,7 @@
    <para>
     To register the system start <menuchoice><guimenu>YaST</guimenu>
     <guimenu>Software</guimenu> <guimenu>Product
-    Registation</guimenu></menuchoice>.  Provide the E-mail address associated
+    Registation</guimenu></menuchoice>. Provide the E-mail address associated
     with the &suse; account you or your organization uses to manage
     subscriptions.
    </para>
@@ -97,6 +98,15 @@
     form the list of auto-detected servers or provide the URl at
     <guimenu>Register System via local SMT Server</guimenu>. Proceed with
     <guimenu>Next</guimenu> to finish the registration.
+   </para>
+
+   <para>
+    <remark condition="clarity">
+     2018-03-09 - fs: TODO: Registering modules that have been installed via Add-On Product
+    dialog from the Package CD
+    --> Looks this is buggy, extensions and modules are not seen by YaST
+    </remark>
+
    </para>
   </sect2>
 
@@ -114,24 +124,56 @@
     subscriptions.
    </para>
    <para>
-    THis <command>SUSEconnect</command> command will only register the base
-    system of &productname;. See <xref
-    linkend="sec.register_sle.system.suseconnect.extension"/> on how to
-    register other system components.
+    This <command>SUSEconnect</command> command will only register the base
+    system of &productname;. This is required to register other system
+    components as described in <xref
+    linkend="sec.register_sle.system.suseconnect.extension"/>.
    </para>
    <para>
-   To register with a local registration server, additionally provide the URL
-   to the server:
+    To register with a local registration server, additionally provide the URL
+    to the server:
    </para>
    <screen>&prompt.user;sudo SUSEConnect -r <replaceable>REGISTRATION_CODE</replaceable> -e <replaceable>EMAIL_ADDRESS</replaceable> \
 --url "https://suse_register.example.com/"</screen>
 
    <sect3 xml:id="sec.register_sle.system.suseconnect.extension">
-    <title>Registering Modules and Extensions</title>
+    <title>Registering Extensions</title>
     <para>
      Once you have regsitered the base system, you also need to register all
      modules and extensions you have installed.
     </para>
+
+
+    <screen>
+        tux@d167:~> sudo SUSEConnect --list-extensions
+
+AVAILABLE EXTENSIONS AND MODULES
+
+
+FREE EXTENSIONS
+
+  Basesystem Module 15 x86_64 (BETA) (Installed)
+  De-Install with:   SUSEConnect -d -p sle-module-basesystem/15/x86_64
+
+    Desktop Applications Module 15 x86_64 (BETA) (Installed)
+    De-Install with: SUSEConnect -d -p sle-module-desktop-applications/15/x86_64
+
+    Server Applications Module 15 x86_64 (BETA) (Installed)
+    De-Install with: SUSEConnect -d -p sle-module-server-applications/15/x86_64
+
+    Containers Module 15 x86_64 (BETA)
+    Install with:    SUSEConnect    -p sle-module-containers/15/x86_64
+
+    SUSE Cloud Application Platform Tools Module 15 x86_64 (BETA)
+    Install with:    SUSEConnect    -p sle-module-cap-tools/15/x86_64
+
+
+MORE INFORMATION
+
+You can find more information about available modules here:
+https://www.suse.com/products/server/features/modules.html
+    </screen>
+
 
 <screen>
 sudo SUSEConnect --list-extensions
